@@ -169,9 +169,9 @@ export default {
         email: 'required|max:100|email',
         age: 'required|min_value:18|max_value:100',
         password: 'required|min:8|max:100',
-        confirm_password: 'required|confirmed:@password',
+        confirm_password: 'required|password_confirmed:@password',
         country: 'required',
-        tos: 'required',
+        tos: 'tos',
       },
     };
   },

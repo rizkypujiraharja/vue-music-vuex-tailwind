@@ -1,5 +1,5 @@
 import {
-  Form as VeeForm, Field as VeeField, defineRule, ErrorMessage,
+  Form as VeeForm, Field as VeeField, defineRule, ErrorMessage, configure,
 } from 'vee-validate';
 import {
   required, min, max, alpha_spaces as alphaSpaces, email,
@@ -19,6 +19,29 @@ export default {
     defineRule('email', email);
     defineRule('min_value', minValue);
     defineRule('max_value', maxValue);
-    defineRule('confirmed', confirmed);
+    defineRule('password_confirmed', confirmed);
+    defineRule('tos', required);
+
+    configure({
+      generateMessage: (ctx) => {
+        const messages = {
+          required: `The field ${ctx.field} is required.`,
+          min: `The field ${ctx.field} is too short.`,
+          max: `The field ${ctx.field} is too short.`,
+          alpha_spaces: `The field ${ctx.field} may only contain alphabetical character and spaces.`,
+          email: `The field ${ctx.field} must be a valid email.`,
+          min_value: `The field ${ctx.field} is too low.`,
+          max_value: `The field ${ctx.field} is too high.`,
+          password_confirmed: "The password doesn't match.",
+          tos: 'You must accpet the Terms of Service',
+        };
+
+        const message = messages[ctx.rule.name]
+          ? messages[ctx.rule.name]
+          : `The field ${ctx.field} is invalid.`;
+
+        return message;
+      },
+    });
   },
 };
