@@ -55,116 +55,10 @@
           </ul>
 
           <!-- Login Form -->
-          <div class="text-white text-center font-bold p-5 mb-4"
-            :class="login_alert_variant"
-            v-if="login_show_alert"
-          >
-            {{ login_alert_msg }}
-          </div>
-          <vee-form v-if="tab == 'login'" :validation-schema="loginSchema"
-            @submit="login">
-            <!-- Email -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Email</label>
-              <vee-field type="email" name="email"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Enter Email" />
-                <ErrorMessage class="text-red-600" name="email" />
-            </div>
-            <!-- Password -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Password</label>
-              <vee-field type="password" name="password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Password" />
-                <ErrorMessage class="text-red-600" name="password" />
-            </div>
-            <button type="submit" :disabled="login_in_submission"
-              class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
-                hover:bg-purple-700">
-              Submit
-            </button>
-          </vee-form>
+          <login-form v-if="tab == 'login'" />
+
           <!-- Registration Form -->
-          <div class="text-white text-center font-bold p-5 mb-4"
-            :class="reg_alert_variant"
-            v-if="reg_show_alert"
-          >
-            {{ reg_alert_msg }}
-          </div>
-          <vee-form v-if="tab == 'register'" :validation-schema="registerSchema"
-            @submit="register">
-            <!-- Name -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Name</label>
-              <vee-field type="text" name="name"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Enter Name" />
-                <ErrorMessage class="text-red-600" name="name" />
-            </div>
-            <!-- Email -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Email</label>
-              <vee-field type="email" name="email"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Enter Email" />
-                <ErrorMessage class="text-red-600" name="email" />
-            </div>
-            <!-- Age -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Age</label>
-              <vee-field type="number" name="age"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded" />
-                <ErrorMessage class="text-red-600" name="age" />
-            </div>
-            <!-- Password -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Password</label>
-              <vee-field type="password" name="password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Password" />
-                <ErrorMessage class="text-red-600" name="password" />
-            </div>
-            <!-- Confirm Password -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Confirm Password</label>
-              <vee-field type="password" name="confirm_password"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded"
-                placeholder="Confirm Password" />
-                <ErrorMessage class="text-red-600" name="confirm_password" />
-            </div>
-            <!-- Country -->
-            <div class="mb-3">
-              <label class="inline-block mb-2">Country</label>
-              <vee-field as="select" name="country"
-                class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
-                  duration-500 focus:outline-none focus:border-black rounded">
-                <option value="USA">USA</option>
-                <option value="Mexico">Mexico</option>
-                <option value="Germany">Germany</option>
-              </vee-field>
-                <ErrorMessage class="text-red-600" name="country" />
-            </div>
-            <!-- TOS -->
-            <div class="mb-3 pl-6">
-              <vee-field type="checkbox" name="tos" value="1"
-                class="w-4 h-4 float-left -ml-6 mt-1 rounded" />
-              <label class="inline-block">Accept terms of service</label>
-                <ErrorMessage class="text-red-600 block" name="tos" />
-            </div>
-            <button type="submit" :disabled="reg_in_submission"
-              class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
-                hover:bg-purple-700">
-              Submit
-            </button>
-          </vee-form>
+          <register-form v-if="tab == 'register'" />
         </div>
       </div>
     </div>
@@ -173,33 +67,18 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import LoginForm from './LoginForm.vue';
+import RegisterForm from './RegisterForm.vue';
 
 export default {
   name: 'Auth',
+  components: {
+    LoginForm,
+    RegisterForm,
+  },
   data() {
     return {
       tab: 'login',
-      registerSchema: {
-        name: 'required|min:3|max:100|alpha_space',
-        email: 'required|max:100|email',
-        age: 'required|min_value:18|max_value:100',
-        password: 'required|min:8|max:100',
-        confirm_password: 'required|password_confirmed:@password',
-        country: 'required',
-        tos: 'tos',
-      },
-      loginSchema: {
-        email: 'required|max:100|email',
-        password: 'required|min:8|max:100',
-      },
-      reg_in_submission: false,
-      reg_show_alert: false,
-      reg_alert_variant: 'bg-blue-500',
-      reg_alert_msg: 'Pleasse wait! Your account is being created.',
-      login_in_submission: false,
-      login_show_alert: false,
-      login_alert_variant: 'bg-blue-500',
-      login_alert_msg: 'Pleasse wait! Logging to your account.',
     };
   },
   computed: {
@@ -207,28 +86,6 @@ export default {
   },
   methods: {
     ...mapMutations(['toggleAuthModal']),
-    register(values) {
-      this.reg_show_alert = true;
-      this.reg_in_submission = true;
-      this.reg_alert_variant = 'bg-blue-500';
-      this.reg_alert_msg = 'Pleasse wait! Your account is being created.';
-      setTimeout(() => {
-        this.reg_alert_variant = 'bg-green-500';
-        this.reg_alert_msg = 'Success! Your account has been created.';
-        console.log(values);
-      }, 2000);
-    },
-    login(values) {
-      this.login_show_alert = true;
-      this.login_in_submission = true;
-      this.login_alert_variant = 'bg-blue-500';
-      this.login_alert_msg = 'Pleasse wait! Logging to your account.';
-      setTimeout(() => {
-        this.login_alert_variant = 'bg-green-500';
-        this.login_alert_msg = 'Success! redirecting to homepage.';
-        console.log(values);
-      }, 2000);
-    },
   },
 };
 </script>
