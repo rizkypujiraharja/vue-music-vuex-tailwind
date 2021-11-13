@@ -55,30 +55,45 @@
           </ul>
 
           <!-- Login Form -->
-          <form v-if="tab == 'login'">
+          <div class="text-white text-center font-bold p-5 mb-4"
+            :class="login_alert_variant"
+            v-if="login_show_alert"
+          >
+            {{ login_alert_msg }}
+          </div>
+          <vee-form v-if="tab == 'login'" :validation-schema="loginSchema"
+            @submit="login">
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input type="email"
+              <vee-field type="email" name="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email" />
+                <ErrorMessage class="text-red-600" name="email" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input type="password"
+              <vee-field type="password" name="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition
                   duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password" />
+                <ErrorMessage class="text-red-600" name="password" />
             </div>
-            <button type="submit"
+            <button type="submit" :disabled="login_in_submission"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
                 hover:bg-purple-700">
               Submit
             </button>
-          </form>
+          </vee-form>
           <!-- Registration Form -->
+          <div class="text-white text-center font-bold p-5 mb-4"
+            :class="reg_alert_variant"
+            v-if="reg_show_alert"
+          >
+            {{ reg_alert_msg }}
+          </div>
           <vee-form v-if="tab == 'register'" :validation-schema="registerSchema"
             @submit="register">
             <!-- Name -->
@@ -144,7 +159,7 @@
               <label class="inline-block">Accept terms of service</label>
                 <ErrorMessage class="text-red-600 block" name="tos" />
             </div>
-            <button type="submit"
+            <button type="submit" :disabled="reg_in_submission"
               class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition
                 hover:bg-purple-700">
               Submit
@@ -173,6 +188,18 @@ export default {
         country: 'required',
         tos: 'tos',
       },
+      loginSchema: {
+        email: 'required|max:100|email',
+        password: 'required|min:8|max:100',
+      },
+      reg_in_submission: false,
+      reg_show_alert: false,
+      reg_alert_variant: 'bg-blue-500',
+      reg_alert_msg: 'Pleasse wait! Your account is being created.',
+      login_in_submission: false,
+      login_show_alert: false,
+      login_alert_variant: 'bg-blue-500',
+      login_alert_msg: 'Pleasse wait! Logging to your account.',
     };
   },
   computed: {
@@ -181,7 +208,26 @@ export default {
   methods: {
     ...mapMutations(['toggleAuthModal']),
     register(values) {
-      console.log(values);
+      this.reg_show_alert = true;
+      this.reg_in_submission = true;
+      this.reg_alert_variant = 'bg-blue-500';
+      this.reg_alert_msg = 'Pleasse wait! Your account is being created.';
+      setTimeout(() => {
+        this.reg_alert_variant = 'bg-green-500';
+        this.reg_alert_msg = 'Success! Your account has been created.';
+        console.log(values);
+      }, 2000);
+    },
+    login(values) {
+      this.login_show_alert = true;
+      this.login_in_submission = true;
+      this.login_alert_variant = 'bg-blue-500';
+      this.login_alert_msg = 'Pleasse wait! Logging to your account.';
+      setTimeout(() => {
+        this.login_alert_variant = 'bg-green-500';
+        this.login_alert_msg = 'Success! redirecting to homepage.';
+        console.log(values);
+      }, 2000);
     },
   },
 };
