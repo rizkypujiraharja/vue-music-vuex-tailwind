@@ -268,7 +268,7 @@ export default {
   name: 'App',
   components: {
     AppHeader,
-    AuthModal
-  }
-}
+    AuthModal,
+  },
+};
 </script>
