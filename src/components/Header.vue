@@ -19,7 +19,7 @@
               <a class="px-2 text-white" href="#">Manage</a>
             </li>
             <li>
-              <a class="px-2 text-white" href="#">Logout</a>
+              <a class="px-2 text-white" href="#" @click.prevent="signout">Logout</a>
             </li>
           </template>
         </ul>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   name: 'Header',
@@ -37,9 +37,8 @@ export default {
     ...mapState(['userLoggedIn']),
   },
   methods: {
-    ...mapMutations([
-      'toggleAuthModal',
-    ]),
+    ...mapMutations(['toggleAuthModal']),
+    ...mapActions(['signout']),
   },
 };
 </script>
