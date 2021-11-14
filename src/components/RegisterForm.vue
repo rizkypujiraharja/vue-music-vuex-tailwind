@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { auth } from '@/includes/firebase';
+import { auth, usersCollection } from '@/includes/firebase';
 
 export default {
   name: 'Register Form',
@@ -113,12 +113,23 @@ export default {
           values.email, values.password,
         );
       } catch (error) {
-        console.log(error);
-        this.reg_show_alert = true;
         this.reg_in_submission = false;
         this.reg_alert_variant = 'bg-red-500';
         this.reg_alert_msg = `Error! ${error.message}`;
+        return;
+      }
 
+      try {
+        usersCollection.add({
+          nam: values.name,
+          emai: values.email,
+          age: values.age,
+          country: values.country,
+        });
+      } catch (error) {
+        this.reg_in_submission = false;
+        this.reg_alert_variant = 'bg-red-500';
+        this.reg_alert_msg = `Error! ${error.message}`;
         return;
       }
 
